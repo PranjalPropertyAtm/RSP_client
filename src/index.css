@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-rsp-saffron: #f47216;
+  --color-rsp-navy: #002147;
+  --color-rsp-green: #006400;
+  --font-sans: 'Inter Variable', 'Inter', 'Noto Sans Devanagari', system-ui, sans-serif;
+  --font-heading: 'Geist Sans', 'Inter Variable', 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+}
+
+:root {
+  --radius: 0.5rem;
+  --rsp-saffron: #f47216;
+  --rsp-navy: #002147;
+  --rsp-green: #006400;
+
+  --background: #ffffff;
+  --foreground: #002147;
+  --card: #ffffff;
+  --card-foreground: #002147;
+  --popover: #ffffff;
+  --popover-foreground: #002147;
+  --primary: #f47216;
+  --primary-foreground: #ffffff;
+  --secondary: #002147;
+  --secondary-foreground: #ffffff;
+  --muted: #f4f7fb;
+  --muted-foreground: #5a6b7d;
+  --accent: #e8f5e9;
+  --accent-foreground: #006400;
+  --destructive: #dc2626;
+  --border: #e2e8f0;
+  --input: #dde4ee;
+  --ring: #f47216;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply overflow-x-hidden;
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply overflow-x-hidden bg-background text-sm leading-relaxed text-foreground antialiased;
+    scrollbar-gutter: stable;
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Radix Select/Dropdown scroll-lock adds extra padding and shifts the layout */
+  body[data-scroll-locked] {
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  #root {
+    @apply min-h-screen overflow-x-hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    @apply tracking-tight;
+  }
+}
+
+@layer utilities {
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-brand {
+    font-family: var(--font-heading);
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  .tricolor-bar {
+    background: linear-gradient(
+      to right,
+      var(--rsp-saffron) 33.33%,
+      #ffffff 33.33%,
+      #ffffff 66.66%,
+      var(--rsp-green) 66.66%
+    );
+    height: 4px;
+  }
+
+  .tricolor-bar-thin {
+    background: linear-gradient(
+      to right,
+      var(--rsp-saffron) 33.33%,
+      #ffffff 33.33%,
+      #ffffff 66.66%,
+      var(--rsp-green) 66.66%
+    );
+    height: 3px;
+  }
+
+  .bg-auth-pattern {
+    background-color: #f8fafc;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgb(244 114 22 / 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 80% 80%, rgb(0 100 0 / 0.05) 0%, transparent 45%),
+      radial-gradient(circle at 50% 50%, rgb(0 33 71 / 0.03) 0%, transparent 60%);
+  }
+}

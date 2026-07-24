@@ -2,6 +2,8 @@ export type Role = 'ADMIN' | 'EMPLOYEE';
 
 export type Gender = 'MALE' | 'FEMALE' | 'OTHER';
 
+export type RecordStatus = 'ACTIVE' | 'INACTIVE';
+
 export type ProblemCategory =
   | 'WATER_IRRIGATION'
   | 'ELECTRICITY'

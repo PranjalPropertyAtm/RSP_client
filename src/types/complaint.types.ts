@@ -15,8 +15,8 @@ export interface Complaint {
   id: string;
   caseId: string;
   fullName: string;
-  fatherName: string;
-  age: number;
+  fatherName?: string | null;
+  age?: number | null;
   gender: Gender;
   mobile: string;
   email?: string | null;
@@ -45,8 +45,8 @@ export interface Complaint {
 
 export interface CreateComplaintPayload {
   fullName: string;
-  fatherName: string;
-  age: number;
+  fatherName?: string | null;
+  age?: number | null;
   gender: Gender;
   mobile: string;
   email?: string;
@@ -57,6 +57,7 @@ export interface CreateComplaintPayload {
   state: string;
   district: string;
   postOffice: string;
+  villageId?: string;
   village?: string;
   tehsil?: string;
   problemCategory: ProblemCategory;

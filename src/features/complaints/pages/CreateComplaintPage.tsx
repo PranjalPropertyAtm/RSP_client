@@ -14,8 +14,8 @@ export function CreateComplaintPage() {
     createComplaint.mutate(
       {
         fullName: values.fullName,
-        fatherName: values.fatherName,
-        age: values.age,
+        fatherName: values.fatherName || undefined,
+        age: values.age ?? undefined,
         gender: values.gender,
         mobile: values.mobile,
         email: values.email || undefined,
@@ -29,6 +29,7 @@ export function CreateComplaintPage() {
         state: values.state,
         district: values.district,
         postOffice: values.postOffice,
+        villageId: values.villageId || undefined,
         village: values.village || undefined,
         tehsil: values.tehsil || undefined,
         problemCategory: values.problemCategory,

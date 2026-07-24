@@ -31,6 +31,42 @@ const CreateComplaintPage = lazyRoute(
   () => import('@/features/complaints/pages/CreateComplaintPage'),
   'CreateComplaintPage'
 );
+const VillageListPage = lazyRoute(
+  () => import('@/features/villages/pages/VillageListPage'),
+  'VillageListPage'
+);
+const CreateVillagePage = lazyRoute(
+  () => import('@/features/villages/pages/CreateVillagePage'),
+  'CreateVillagePage'
+);
+const EditVillagePage = lazyRoute(
+  () => import('@/features/villages/pages/EditVillagePage'),
+  'EditVillagePage'
+);
+const VillageDetailsPage = lazyRoute(
+  () => import('@/features/villages/pages/VillageDetailsPage'),
+  'VillageDetailsPage'
+);
+const SankalpPrerakListPage = lazyRoute(
+  () => import('@/features/sankalpPreraks/pages/SankalpPrerakListPage'),
+  'SankalpPrerakListPage'
+);
+const CreateSankalpPrerakPage = lazyRoute(
+  () => import('@/features/sankalpPreraks/pages/CreateSankalpPrerakPage'),
+  'CreateSankalpPrerakPage'
+);
+const EditSankalpPrerakPage = lazyRoute(
+  () => import('@/features/sankalpPreraks/pages/EditSankalpPrerakPage'),
+  'EditSankalpPrerakPage'
+);
+const SankalpPrerakProfilePage = lazyRoute(
+  () => import('@/features/sankalpPreraks/pages/SankalpPrerakProfilePage'),
+  'SankalpPrerakProfilePage'
+);
+const CreateWorkLogPage = lazyRoute(
+  () => import('@/features/workLogs/pages/CreateWorkLogPage'),
+  'CreateWorkLogPage'
+);
 const NotFoundPage = lazyRoute(() => import('@/pages/errors/NotFoundPage'), 'NotFoundPage');
 const UnauthorizedPage = lazyRoute(
   () => import('@/pages/errors/UnauthorizedPage'),
@@ -74,9 +110,18 @@ export const router = createBrowserRouter([
                 path: '/complaints/:id',
                 element: <ComplaintDetailsPage />,
               },
+              { path: ROUTES.VILLAGES.LIST, element: <VillageListPage /> },
+              { path: '/villages/:id', element: <VillageDetailsPage /> },
+              { path: ROUTES.SANKALP_PRERAKS.LIST, element: <SankalpPrerakListPage /> },
+              { path: '/sankalp-preraks/:id', element: <SankalpPrerakProfilePage /> },
+              { path: ROUTES.WORK_LOGS.CREATE, element: <CreateWorkLogPage /> },
               {
                 element: <RoleGuard allowedRoles={[ROLES.ADMIN]} />,
                 children: [
+                  { path: ROUTES.VILLAGES.CREATE, element: <CreateVillagePage /> },
+                  { path: '/villages/:id/edit', element: <EditVillagePage /> },
+                  { path: ROUTES.SANKALP_PRERAKS.CREATE, element: <CreateSankalpPrerakPage /> },
+                  { path: '/sankalp-preraks/:id/edit', element: <EditSankalpPrerakPage /> },
                   { path: ROUTES.USERS.LIST, element: <UserListPage /> },
                   { path: ROUTES.USERS.CREATE, element: <CreateUserPage /> },
                   { path: '/users/:id/edit', element: <EditUserPage /> },

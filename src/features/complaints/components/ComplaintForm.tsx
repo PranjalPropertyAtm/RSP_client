@@ -10,6 +10,7 @@ import {
   type CreateComplaintFormValues,
 } from '@/features/complaints/schemas/complaint.schema';
 import { usePincodeLookup } from '@/features/locations/hooks/usePincodeLookup';
+import { useVillageFilterOptions } from '@/features/villages/hooks/useVillages';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -82,14 +83,30 @@ export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
   });
 
   const pincode = form.watch('pincode');
+  const district = form.watch('district');
   const contactedAuthority = form.watch('contactedAuthority');
   const { data: locationData, isFetching: isPincodeLoading, isError: isPincodeError } = usePincodeLookup(pincode);
+  const { data: allVillages, isFetching: isVillagesLoading } = useVillageFilterOptions();
+  const villages =
+    allVillages?.filter((v) => {
+      if (!district) return false;
+      const normalizedDistrict = district.toLowerCase();
+      const villageDistrict = v.district.toLowerCase();
+      return (
+        villageDistrict === normalizedDistrict ||
+        villageDistrict.includes(normalizedDistrict) ||
+        normalizedDistrict.includes(villageDistrict)
+      );
+    }) ?? [];
 
   useEffect(() => {
     if (!locationData) return;
 
     form.setValue('state', locationData.state, { shouldValidate: true });
     form.setValue('district', locationData.district, { shouldValidate: true });
+    form.setValue('villageId', '', { shouldValidate: true });
+    form.setValue('village', '', { shouldValidate: true });
+    form.setValue('tehsil', '', { shouldValidate: true });
 
     if (locationData.postOffices.length === 1) {
       form.setValue('postOffice', locationData.postOffices[0].name, { shouldValidate: true });
@@ -125,7 +142,7 @@ export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
             name="fatherName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel><RequiredLabel>Father/Husband Name</RequiredLabel></FormLabel>
+                <FormLabel>Father/Husband Name</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter father/husband name" {...field} />
                 </FormControl>
@@ -138,7 +155,7 @@ export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
             name="age"
             render={({ field }) => (
               <FormItem>
-                <FormLabel><RequiredLabel>Age</RequiredLabel></FormLabel>
+                <FormLabel>Age</FormLabel>
                 <FormControl>
                   <Input
                     type="number"
@@ -280,6 +297,9 @@ export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
                         form.setValue('state', '');
                         form.setValue('district', '');
                         form.setValue('postOffice', '');
+                        form.setValue('villageId', '');
+                        form.setValue('village', '');
+                        form.setValue('tehsil', '');
                       }
                     }}
                   />
@@ -352,13 +372,39 @@ export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
           />
           <FormField
             control={form.control}
-            name="village"
+            name="villageId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Village</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter village" {...field} />
-                </FormControl>
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    const selected = villages.find((v) => v.id === value);
+                    form.setValue('village', selected?.villageName ?? '', { shouldValidate: true });
+                    form.setValue('tehsil', selected?.tehsil ?? '', { shouldValidate: true });
+                  }}
+                  value={field.value}
+                  disabled={!district}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder={district ? 'Select village' : 'Enter pincode first'} />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {villages.map((v) => (
+                      <SelectItem key={v.id} value={v.id}>
+                        {v.villageName} — {v.block}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {isVillagesLoading && district && (
+                  <p className="text-sm text-muted-foreground">Loading villages...</p>
+                )}
+                {district && !isVillagesLoading && villages.length === 0 && (
+                  <p className="text-sm text-muted-foreground">No villages found for this district</p>
+                )}
                 <FormMessage />
               </FormItem>
             )}
@@ -370,7 +416,7 @@ export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
               <FormItem>
                 <FormLabel>Tehsil</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter tehsil" {...field} />
+                  <Input readOnly placeholder="Auto-populated from village" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

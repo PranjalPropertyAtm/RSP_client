@@ -21,4 +21,26 @@ export const QUERY_KEYS = {
     details: () => [...QUERY_KEYS.complaints.all, 'detail'] as const,
     detail: (id: string) => [...QUERY_KEYS.complaints.details(), id] as const,
   },
+  villages: {
+    all: ['villages'] as const,
+    lists: () => [...QUERY_KEYS.villages.all, 'list'] as const,
+    list: (params: object) => [...QUERY_KEYS.villages.lists(), params] as const,
+    details: () => [...QUERY_KEYS.villages.all, 'detail'] as const,
+    detail: (id: string) => [...QUERY_KEYS.villages.details(), id] as const,
+    filterOptions: () => [...QUERY_KEYS.villages.all, 'filter-options'] as const,
+  },
+  sankalpPreraks: {
+    all: ['sankalp-preraks'] as const,
+    lists: () => [...QUERY_KEYS.sankalpPreraks.all, 'list'] as const,
+    list: (params: object) => [...QUERY_KEYS.sankalpPreraks.lists(), params] as const,
+    details: () => [...QUERY_KEYS.sankalpPreraks.all, 'detail'] as const,
+    detail: (id: string) => [...QUERY_KEYS.sankalpPreraks.details(), id] as const,
+    profile: (id: string) => [...QUERY_KEYS.sankalpPreraks.all, 'profile', id] as const,
+  },
+  workLogs: {
+    all: ['work-logs'] as const,
+    lists: () => [...QUERY_KEYS.workLogs.all, 'list'] as const,
+    list: (params: object) => [...QUERY_KEYS.workLogs.lists(), params] as const,
+    timeline: (prerakId: string) => [...QUERY_KEYS.workLogs.all, 'timeline', prerakId] as const,
+  },
 } as const;

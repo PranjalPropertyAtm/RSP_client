@@ -31,6 +31,17 @@ export interface DashboardStats {
   activeUsers?: number;
   userComplaintStats?: UserComplaintStat[];
   recentComplaints?: RecentComplaintActivity[];
+  totalVillages?: number;
+  activeVillages?: number;
+  totalPreraks?: number;
+  activePreraks?: number;
+  totalWorkEntries?: number;
+  totalFamiliesSurveyed?: number;
+  villageWiseActivities?: Array<{
+    village?: { id: string; villageName: string; villageCode: string };
+    activityCount: number;
+  }>;
+  monthlyWorkTrend?: Array<{ month: string; count: number }>;
 }
 
 export const dashboardApi = {

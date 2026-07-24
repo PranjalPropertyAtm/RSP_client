@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, FileText, LogOut, Menu, ChevronDown, Home, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, FileText, LogOut, Menu, ChevronDown, Home, ChevronRight, MapPin, UserCheck } from 'lucide-react';
 import { Fragment, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -26,6 +26,8 @@ const navItems: Array<{
   roles: Role[];
 }> = [
   { label: 'Dashboard', href: ROUTES.DASHBOARD, icon: LayoutDashboard, roles: ['ADMIN', 'EMPLOYEE'] },
+  { label: 'Villages', href: ROUTES.VILLAGES.LIST, icon: MapPin, roles: ['ADMIN', 'EMPLOYEE'] },
+  { label: 'Sankalp Preraks', href: ROUTES.SANKALP_PRERAKS.LIST, icon: UserCheck, roles: ['ADMIN', 'EMPLOYEE'] },
   { label: 'Complaints', href: ROUTES.COMPLAINTS.LIST, icon: FileText, roles: ['ADMIN', 'EMPLOYEE'] },
   { label: 'Users', href: ROUTES.USERS.LIST, icon: Users, roles: ['ADMIN'] },
 ];
@@ -68,6 +70,32 @@ function getBreadcrumbs(pathname: string): BreadcrumbItem[] {
       { label: 'Users', href: ROUTES.USERS.LIST },
       { label: 'Edit User' },
     ];
+  }
+
+  if (pathname === ROUTES.VILLAGES.LIST) return [{ label: 'Villages' }];
+  if (pathname === ROUTES.VILLAGES.CREATE) {
+    return [{ label: 'Villages', href: ROUTES.VILLAGES.LIST }, { label: 'Create Village' }];
+  }
+  if (/^\/villages\/[^/]+\/edit$/.test(pathname)) {
+    return [{ label: 'Villages', href: ROUTES.VILLAGES.LIST }, { label: 'Edit Village' }];
+  }
+  if (/^\/villages\/[^/]+$/.test(pathname)) {
+    return [{ label: 'Villages', href: ROUTES.VILLAGES.LIST }, { label: 'Village Details' }];
+  }
+
+  if (pathname === ROUTES.SANKALP_PRERAKS.LIST) return [{ label: 'Sankalp Preraks' }];
+  if (pathname === ROUTES.SANKALP_PRERAKS.CREATE) {
+    return [{ label: 'Sankalp Preraks', href: ROUTES.SANKALP_PRERAKS.LIST }, { label: 'Create Prerak' }];
+  }
+  if (/^\/sankalp-preraks\/[^/]+\/edit$/.test(pathname)) {
+    return [{ label: 'Sankalp Preraks', href: ROUTES.SANKALP_PRERAKS.LIST }, { label: 'Edit Prerak' }];
+  }
+  if (/^\/sankalp-preraks\/[^/]+$/.test(pathname)) {
+    return [{ label: 'Sankalp Preraks', href: ROUTES.SANKALP_PRERAKS.LIST }, { label: 'Prerak Profile' }];
+  }
+
+  if (pathname === ROUTES.WORK_LOGS.CREATE) {
+    return [{ label: 'Sankalp Preraks', href: ROUTES.SANKALP_PRERAKS.LIST }, { label: 'Add Work Entry' }];
   }
 
   return [];

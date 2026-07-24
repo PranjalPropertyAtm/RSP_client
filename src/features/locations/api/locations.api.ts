@@ -12,6 +12,8 @@ export interface LocationData {
   pincode: string;
   state: string;
   district: string;
+  block: string;
+  tehsil: string;
   postOffices: PostOffice[];
 }
 

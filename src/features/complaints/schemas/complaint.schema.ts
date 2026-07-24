@@ -22,12 +22,11 @@ export const createComplaintSchema = z
       .string()
       .min(1, 'Full name is required')
       .min(3, 'Full name must be at least 3 characters'),
-    fatherName: z.string().min(2, 'Father/Husband name is required'),
+    fatherName: z.string().optional().or(z.literal('')),
     age: z
-      .number({ error: 'Age is required' })
-      .int()
-      .min(1, 'Age must be at least 1')
-      .max(120, 'Age must be at most 120'),
+      .union([z.coerce.number().int().min(1).max(120), z.literal('')])
+      .optional()
+      .transform((value) => (value === '' || value === undefined ? undefined : value)),
     gender: genderEnum,
     mobile: z
       .string()
@@ -44,6 +43,7 @@ export const createComplaintSchema = z
     state: z.string().min(1, 'State is required'),
     district: z.string().min(1, 'District is required'),
     postOffice: z.string().min(1, 'Post office is required'),
+    villageId: z.string().optional().or(z.literal('')),
     village: z.string().optional(),
     tehsil: z.string().optional(),
     problemCategory: categoryEnum,
@@ -69,8 +69,8 @@ export const createComplaintSchema = z
 
 const baseComplaintFields = z.object({
   fullName: z.string().min(3),
-  fatherName: z.string().min(1),
-  age: z.number().int().min(1).max(120),
+  fatherName: z.string().optional().or(z.literal('')),
+  age: z.number().int().min(1).max(120).optional(),
   gender: genderEnum,
   mobile: z.string().regex(/^[6-9]\d{9}$/, 'Enter a valid 10-digit Indian mobile number'),
   email: z.string().email().optional().or(z.literal('')),
@@ -81,6 +81,7 @@ const baseComplaintFields = z.object({
   state: z.string().min(1),
   district: z.string().min(1),
   postOffice: z.string().min(1),
+  villageId: z.string().optional().or(z.literal('')),
   village: z.string().optional(),
   tehsil: z.string().optional(),
   problemCategory: categoryEnum,
@@ -134,6 +135,7 @@ export const defaultComplaintFormValues = {
   state: '',
   district: '',
   postOffice: '',
+  villageId: '',
   village: '',
   tehsil: '',
   problemCategory: 'OTHER' as const,

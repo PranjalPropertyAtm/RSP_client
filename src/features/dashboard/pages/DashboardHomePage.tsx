@@ -1,4 +1,4 @@
-import { FileText, CalendarDays, CalendarRange, Users } from 'lucide-react';
+import { FileText, CalendarDays, CalendarRange, Users, MapPin, UserCheck, ClipboardList } from 'lucide-react';
 import { PageContainer } from '@/components/common/PageContainer';
 import { PageHeader } from '@/components/common/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +6,7 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { ErrorState } from '@/components/common/ErrorState';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 import { AdminComplaintActivity } from '@/features/dashboard/components/AdminComplaintActivity';
+import { VillageDashboardCharts } from '@/features/dashboard/components/VillageDashboardCharts';
 import { useAuthStore } from '@/stores/auth.store';
 import { ROLES } from '@/constants/roles';
 import { cn } from '@/lib/utils';
@@ -27,12 +28,19 @@ export function DashboardHomePage() {
 
   const stats = isAdmin
     ? [
+        { label: 'Total Villages', value: data?.totalVillages ?? 0, icon: MapPin },
+        { label: 'Active Preraks', value: data?.activePreraks ?? 0, icon: UserCheck },
+        { label: 'Work Entries', value: data?.totalWorkEntries ?? 0, icon: ClipboardList },
         { label: 'Total Complaints', value: data?.totalComplaints ?? 0, icon: FileText },
         { label: 'Today', value: data?.todayComplaints ?? 0, icon: CalendarDays },
         { label: 'This Month', value: data?.monthComplaints ?? 0, icon: CalendarRange },
+        { label: 'Families Surveyed', value: data?.totalFamiliesSurveyed ?? 0, icon: Users },
         { label: 'Active Employees', value: data?.activeUsers ?? 0, icon: Users },
       ]
     : [
+        { label: 'Total Villages', value: data?.totalVillages ?? 0, icon: MapPin },
+        { label: 'Active Preraks', value: data?.activePreraks ?? 0, icon: UserCheck },
+        { label: 'Work Entries', value: data?.totalWorkEntries ?? 0, icon: ClipboardList },
         { label: 'My Complaints', value: data?.totalComplaints ?? 0, icon: FileText },
         { label: 'Filed Today', value: data?.todayComplaints ?? 0, icon: CalendarDays },
         { label: 'Filed This Month', value: data?.monthComplaints ?? 0, icon: CalendarRange },
@@ -44,8 +52,8 @@ export function DashboardHomePage() {
         title={`Welcome, ${user?.fullName ?? 'User'}`}
         description={
           isAdmin
-            ? 'Overview of all complaint management activity'
-            : 'Overview of complaints filed by you'
+            ? 'Overview of village management, field activities and complaints'
+            : 'Overview of villages, preraks and your complaint activity'
         }
       />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -65,6 +73,13 @@ export function DashboardHomePage() {
           );
         })}
       </div>
+
+      {isAdmin && data?.villageWiseActivities && data?.monthlyWorkTrend && (
+        <VillageDashboardCharts
+          villageWiseActivities={data.villageWiseActivities}
+          monthlyWorkTrend={data.monthlyWorkTrend}
+        />
+      )}
 
       {isAdmin && (
         <AdminComplaintActivity

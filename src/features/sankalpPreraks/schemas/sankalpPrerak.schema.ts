@@ -52,11 +52,12 @@ export const workLogSchema = z.object({
   ]),
   workTitle: z.string().min(1, 'Work title is required'),
   description: z.string().optional(),
-  familiesCovered: z.coerce.number().int().min(0).optional().or(z.literal('')),
-  peopleBenefited: z.coerce.number().int().min(0).optional().or(z.literal('')),
-  status: z.enum(['COMPLETED', 'ONGOING', 'PLANNED']).default('COMPLETED'),
+  familiesCovered: z.string().optional(),
+  peopleBenefited: z.string().optional(),
+  status: z.enum(['COMPLETED', 'ONGOING', 'PLANNED']),
   photos: z.array(z.string()).optional(),
   documents: z.array(z.string()).optional(),
 });
 
-export type WorkLogFormValues = z.infer<typeof workLogSchema>;
+export type WorkLogFormInput = z.input<typeof workLogSchema>;
+export type WorkLogFormValues = z.output<typeof workLogSchema>;

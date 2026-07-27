@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { workLogSchema, type WorkLogFormValues } from '@/features/sankalpPreraks/schemas/sankalpPrerak.schema';
+import {
+  workLogSchema,
+  type WorkLogFormInput,
+  type WorkLogFormValues,
+} from '@/features/sankalpPreraks/schemas/sankalpPrerak.schema';
 import { useSankalpPreraks } from '@/features/sankalpPreraks/hooks/useSankalpPreraks';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -33,7 +37,7 @@ export function WorkLogForm({
 }: WorkLogFormProps) {
   const { data: preraksData } = useSankalpPreraks({ limit: 100, status: 'ACTIVE' });
 
-  const form = useForm<WorkLogFormValues>({
+  const form = useForm<WorkLogFormInput, unknown, WorkLogFormValues>({
     resolver: zodResolver(workLogSchema),
     defaultValues: {
       sankalpPrerakId: presetPrerakId ?? '',

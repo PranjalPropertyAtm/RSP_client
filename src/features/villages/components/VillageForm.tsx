@@ -1,12 +1,23 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { villageSchema, type VillageFormInput, type VillageFormValues } from '@/features/villages/schemas/village.schema';
-import { usePincodeLookup } from '@/features/locations/hooks/usePincodeLookup';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { FormSection } from '@/components/forms/FormSection';
 import { FormActions } from '@/components/forms/FormActions';
+import {
+  DEFAULT_VILLAGE_DISTRICT,
+  DEFAULT_VILLAGE_STATE,
+  VILLAGE_DISTRICT_OPTIONS,
+  VILLAGE_STATE_OPTIONS,
+} from '@/constants/village-module';
 import type { Village } from '@/types';
 
 interface VillageFormProps {
@@ -32,8 +43,8 @@ export function VillageForm({
       wardOrMohalla: defaultValues?.wardOrMohalla ?? '',
       block: defaultValues?.block ?? '',
       tehsil: defaultValues?.tehsil ?? '',
-      district: defaultValues?.district ?? '',
-      state: defaultValues?.state ?? '',
+      district: defaultValues?.district ?? DEFAULT_VILLAGE_DISTRICT,
+      state: defaultValues?.state ?? DEFAULT_VILLAGE_STATE,
       pincode: defaultValues?.pincode ?? '',
       totalPopulation:
         defaultValues?.totalPopulation != null ? String(defaultValues.totalPopulation) : '',
@@ -41,29 +52,6 @@ export function VillageForm({
         defaultValues?.totalFamilies != null ? String(defaultValues.totalFamilies) : '',
     },
   });
-
-  const pincode = form.watch('pincode');
-  const { data: pincodeData, isFetching: isPincodeLoading, isError: isPincodeError } =
-    usePincodeLookup(pincode);
-  const isCreate = !defaultValues;
-  const hasPincodeLookup = Boolean(pincodeData && pincode.length === 6);
-
-  useEffect(() => {
-    if (!pincodeData) return;
-    if (!isCreate && pincode === defaultValues?.pincode) return;
-
-    form.setValue('state', pincodeData.state, { shouldValidate: true });
-    form.setValue('district', pincodeData.district, { shouldValidate: true });
-    form.setValue('block', pincodeData.block === 'NA' ? '' : pincodeData.block, { shouldValidate: true });
-    form.setValue('tehsil', pincodeData.tehsil, { shouldValidate: true });
-  }, [pincodeData, pincode, isCreate, defaultValues?.pincode, form]);
-
-  const clearLocationFields = () => {
-    form.setValue('state', '');
-    form.setValue('district', '');
-    form.setValue('block', '');
-    form.setValue('tehsil', '');
-  };
 
   return (
     <Form {...form}>
@@ -84,16 +72,9 @@ export function VillageForm({
                       onChange={(e) => {
                         const value = e.target.value.replace(/\D/g, '').slice(0, 6);
                         field.onChange(value);
-                        if (value.length < 6) clearLocationFields();
                       }}
                     />
                   </FormControl>
-                  {isPincodeLoading && (
-                    <p className="text-sm text-muted-foreground">Looking up pincode...</p>
-                  )}
-                  {isPincodeError && pincode.length === 6 && (
-                    <p className="text-sm text-destructive">No data found for this pincode</p>
-                  )}
                   <FormMessage />
                 </FormItem>
               )}
@@ -104,13 +85,20 @@ export function VillageForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>State *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Auto-populated from pincode"
-                      readOnly={hasPincodeLookup}
-                      {...field}
-                    />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select state" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {VILLAGE_STATE_OPTIONS.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -121,13 +109,20 @@ export function VillageForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>District *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Auto-populated from pincode"
-                      readOnly={hasPincodeLookup}
-                      {...field}
-                    />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select district" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {VILLAGE_DISTRICT_OPTIONS.map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {option}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -139,11 +134,7 @@ export function VillageForm({
                 <FormItem>
                   <FormLabel>Block *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Auto-populated from pincode"
-                      readOnly={hasPincodeLookup && Boolean(field.value)}
-                      {...field}
-                    />
+                    <Input placeholder="Enter block" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,11 +147,7 @@ export function VillageForm({
                 <FormItem>
                   <FormLabel>Tehsil *</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Auto-populated from pincode"
-                      readOnly={hasPincodeLookup}
-                      {...field}
-                    />
+                    <Input placeholder="Enter tehsil" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

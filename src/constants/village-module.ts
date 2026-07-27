@@ -39,3 +39,8 @@ export const GENDER_LABELS = {
   FEMALE: 'Female',
   OTHER: 'Other',
 } as const;
+
+export const VILLAGE_STATE_OPTIONS = ['Uttar Pradesh'] as const;
+export const VILLAGE_DISTRICT_OPTIONS = ['Lucknow'] as const;
+export const DEFAULT_VILLAGE_STATE = VILLAGE_STATE_OPTIONS[0];
+export const DEFAULT_VILLAGE_DISTRICT = VILLAGE_DISTRICT_OPTIONS[0];

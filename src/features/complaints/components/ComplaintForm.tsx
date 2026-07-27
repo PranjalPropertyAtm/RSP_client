@@ -8,6 +8,7 @@ import {
   GENDER_OPTIONS,
   PROBLEM_CATEGORY_OPTIONS,
   type CreateComplaintFormValues,
+  type CreateComplaintFormInput,
 } from '@/features/complaints/schemas/complaint.schema';
 import { usePincodeLookup } from '@/features/locations/hooks/usePincodeLookup';
 import { useVillageFilterOptions } from '@/features/villages/hooks/useVillages';
@@ -77,9 +78,9 @@ function RadioOption({
 }
 
 export function ComplaintForm({ isSubmitting, onSubmit }: ComplaintFormProps) {
-  const form = useForm<CreateComplaintFormValues>({
+  const form = useForm<CreateComplaintFormInput, unknown, CreateComplaintFormValues>({
     resolver: zodResolver(createComplaintSchema),
-    defaultValues: defaultComplaintFormValues as CreateComplaintFormValues,
+    defaultValues: defaultComplaintFormValues,
   });
 
   const pincode = form.watch('pincode');

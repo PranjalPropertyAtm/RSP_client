@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { villageSchema, type VillageFormValues } from '@/features/villages/schemas/village.schema';
+import { villageSchema, type VillageFormInput, type VillageFormValues } from '@/features/villages/schemas/village.schema';
 import { usePincodeLookup } from '@/features/locations/hooks/usePincodeLookup';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,7 @@ export function VillageForm({
   cancelHref,
   onSubmit,
 }: VillageFormProps) {
-  const form = useForm<VillageFormValues>({
+  const form = useForm<VillageFormInput, unknown, VillageFormValues>({
     resolver: zodResolver(villageSchema),
     defaultValues: {
       villageName: defaultValues?.villageName ?? '',
@@ -35,8 +35,10 @@ export function VillageForm({
       district: defaultValues?.district ?? '',
       state: defaultValues?.state ?? '',
       pincode: defaultValues?.pincode ?? '',
-      totalPopulation: defaultValues?.totalPopulation ?? '',
-      totalFamilies: defaultValues?.totalFamilies ?? '',
+      totalPopulation:
+        defaultValues?.totalPopulation != null ? String(defaultValues.totalPopulation) : '',
+      totalFamilies:
+        defaultValues?.totalFamilies != null ? String(defaultValues.totalFamilies) : '',
     },
   });
 

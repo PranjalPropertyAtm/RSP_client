@@ -23,10 +23,7 @@ export const createComplaintSchema = z
       .min(1, 'Full name is required')
       .min(3, 'Full name must be at least 3 characters'),
     fatherName: z.string().optional().or(z.literal('')),
-    age: z
-      .union([z.coerce.number().int().min(1).max(120), z.literal('')])
-      .optional()
-      .transform((value) => (value === '' || value === undefined ? undefined : value)),
+    age: z.string().optional(),
     gender: genderEnum,
     mobile: z
       .string()
@@ -95,7 +92,8 @@ const baseComplaintFields = z.object({
 
 export const updateComplaintSchema = baseComplaintFields.partial();
 
-export type CreateComplaintFormValues = z.infer<typeof createComplaintSchema>;
+export type CreateComplaintFormInput = z.input<typeof createComplaintSchema>;
+export type CreateComplaintFormValues = z.output<typeof createComplaintSchema>;
 export type UpdateComplaintFormValues = z.infer<typeof updateComplaintSchema>;
 
 export const PROBLEM_CATEGORY_OPTIONS = [
@@ -124,7 +122,7 @@ export const GENDER_OPTIONS = [
 export const defaultComplaintFormValues = {
   fullName: '',
   fatherName: '',
-  age: undefined as number | undefined,
+  age: '',
   gender: 'MALE' as const,
   mobile: '',
   email: '',

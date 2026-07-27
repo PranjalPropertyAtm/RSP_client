@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   sankalpPrerakSchema,
+  type SankalpPrerakFormInput,
   type SankalpPrerakFormValues,
 } from '@/features/sankalpPreraks/schemas/sankalpPrerak.schema';
 import { useVillageFilterOptions } from '@/features/villages/hooks/useVillages';
@@ -39,14 +40,14 @@ export function SankalpPrerakForm({
 }: SankalpPrerakFormProps) {
   const { data: villages } = useVillageFilterOptions();
 
-  const form = useForm<SankalpPrerakFormValues>({
+  const form = useForm<SankalpPrerakFormInput, unknown, SankalpPrerakFormValues>({
     resolver: zodResolver(sankalpPrerakSchema),
     defaultValues: {
       fullName: defaultValues?.fullName ?? '',
       fatherOrHusbandName: defaultValues?.fatherOrHusbandName ?? '',
       gender: defaultValues?.gender ?? undefined,
       dateOfBirth: defaultValues?.dateOfBirth?.slice(0, 10) ?? '',
-      age: defaultValues?.age ?? undefined,
+      age: defaultValues?.age != null ? String(defaultValues.age) : '',
       mobileNumber: defaultValues?.mobileNumber ?? '',
       alternateMobile: defaultValues?.alternateMobile ?? '',
       email: defaultValues?.email ?? '',
@@ -75,7 +76,7 @@ export function SankalpPrerakForm({
       let age = today.getFullYear() - birth.getFullYear();
       const m = today.getMonth() - birth.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
-      if (age >= 18 && age <= 100) form.setValue('age', age);
+      if (age >= 18 && age <= 100) form.setValue('age', String(age));
     }
   }, [dob, form]);
 

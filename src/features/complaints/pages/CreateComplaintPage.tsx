@@ -15,7 +15,7 @@ export function CreateComplaintPage() {
       {
         fullName: values.fullName,
         fatherName: values.fatherName || undefined,
-        age: values.age ?? undefined,
+        age: values.age ? Number(values.age) : undefined,
         gender: values.gender,
         mobile: values.mobile,
         email: values.email || undefined,

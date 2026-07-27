@@ -7,10 +7,7 @@ export const sankalpPrerakSchema = z.object({
   fatherOrHusbandName: z.string().optional().or(z.literal('')),
   gender: z.enum(['MALE', 'FEMALE', 'OTHER']).optional(),
   dateOfBirth: z.string().optional().or(z.literal('')),
-  age: z
-    .union([z.coerce.number().int().min(18).max(100), z.literal('')])
-    .optional()
-    .transform((value) => (value === '' || value === undefined ? undefined : value)),
+  age: z.string().optional(),
   mobileNumber: mobileSchema,
   alternateMobile: mobileSchema.optional().or(z.literal('')),
   email: z.string().email('Invalid email').optional().or(z.literal('')),
@@ -30,7 +27,8 @@ export const sankalpPrerakSchema = z.object({
   remarks: z.string().optional(),
 });
 
-export type SankalpPrerakFormValues = z.infer<typeof sankalpPrerakSchema>;
+export type SankalpPrerakFormInput = z.input<typeof sankalpPrerakSchema>;
+export type SankalpPrerakFormValues = z.output<typeof sankalpPrerakSchema>;
 
 export const workLogSchema = z.object({
   sankalpPrerakId: z.string().min(1, 'Sankalp Prerak is required'),

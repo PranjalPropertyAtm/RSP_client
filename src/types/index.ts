@@ -1,4 +1,4 @@
-export type { ApiErrorResponse, ApiSuccessResponse, PaginatedResponse, PaginationMeta, Role, ComplaintStatus, ServerPaginatedApiResponse } from './api.types';
+export type { ApiErrorResponse, ApiSuccessResponse, PaginatedResponse, PaginationMeta, Role, ComplaintStatus, RecordStatus, ServerPaginatedApiResponse } from './api.types';
 export type { AuthTokens, AuthUser, LoginCredentials, LoginResponse } from './auth.types';
 export type {
   Complaint,

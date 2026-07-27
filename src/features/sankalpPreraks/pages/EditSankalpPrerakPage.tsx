@@ -15,7 +15,7 @@ function toPayload(values: SankalpPrerakFormValues) {
     fatherOrHusbandName: rest.fatherOrHusbandName || undefined,
     gender: rest.gender || undefined,
     dateOfBirth: rest.dateOfBirth || undefined,
-    age: rest.age ?? undefined,
+    age: rest.age ? Number(rest.age) : undefined,
     joiningDate: rest.joiningDate || undefined,
     alternateMobile: rest.alternateMobile || undefined,
     email: rest.email || undefined,

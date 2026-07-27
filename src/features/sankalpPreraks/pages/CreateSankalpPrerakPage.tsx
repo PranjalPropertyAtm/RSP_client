@@ -12,7 +12,7 @@ function toPayload(values: SankalpPrerakFormValues) {
     fatherOrHusbandName: values.fatherOrHusbandName || undefined,
     gender: values.gender || undefined,
     dateOfBirth: values.dateOfBirth || undefined,
-    age: values.age ?? undefined,
+    age: values.age ? Number(values.age) : undefined,
     joiningDate: values.joiningDate || undefined,
     alternateMobile: values.alternateMobile || undefined,
     email: values.email || undefined,

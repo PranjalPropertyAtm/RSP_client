@@ -9,8 +9,9 @@ export const villageSchema = z.object({
   district: z.string().min(1, 'District is required'),
   state: z.string().min(1, 'State is required'),
   pincode: z.string().regex(/^\d{6}$/, 'Pincode must be exactly 6 digits'),
-  totalPopulation: z.coerce.number().int().positive().optional().or(z.literal('')),
-  totalFamilies: z.coerce.number().int().positive().optional().or(z.literal('')),
+  totalPopulation: z.string().optional(),
+  totalFamilies: z.string().optional(),
 });
 
-export type VillageFormValues = z.infer<typeof villageSchema>;
+export type VillageFormInput = z.input<typeof villageSchema>;
+export type VillageFormValues = z.output<typeof villageSchema>;
